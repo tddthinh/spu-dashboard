@@ -1,38 +1,355 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.element {
+    display: inline-block;
+    background-color: #aaaaaa;
+    height: 100px;
+    width: 100px;
+    transform: skew(20deg);
+    font-size: 14px;
+    padding: 1px;
+    color: white;
+    margin-right: 5px;
+    margin-left: 5px;
+    animation: shake 1s infinite;
+    animation-direction: alternate;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  
+  @keyframes shake {
+    0% {
+      transform: skewY(8deg);
+    }
+    100% {
+      transform: skewY(-8deg);
+    }
   }
-  to {
-    transform: rotate(360deg);
+
+  .square {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    padding: 5px;
+    animation: shimmy 3s infinite;
+    animation-direction: alternate;
   }
+  
+  @keyframes shimmy {
+    0% {
+      transform: translate(0, 0);    
+    }
+    100% {
+      transform: translate(20px, 50px);
+    }
+  }
+
+  textarea{
+      border: gainsboro 0.5px solid;
+      outline: none;
+  }
+  textarea::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5; 
+    
+}
+  
+  textarea::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #FBC02D; 
+    cursor: pointer;
+}
+  .card {
+    background-color: var(--background);
+    display: block;
+    width: 300px;
+    min-height: 90px;
+    cursor: pointer;
+    padding: 15px;
+    margin: calc(50vh - 30px) auto 0 auto;
+    border: 3px solid var(--primary);
+    box-shadow: 10px -10px 0 -3px var(--background), 10px -10px var(--green),
+          20px -20px 0 -3px var(--background), 20px -20px var(--yellow),
+          30px -30px 0 -3px var(--background), 30px -30px var(--orange),
+          40px -40px 0 -3px var(--background), 40px -40px var(--red);
+  }
+  
+  .cardActive {
+    animation: shadow-wave 1s ease infinite;
+  }
+  .card:hover {
+    animation: shadow-wave 1s ease infinite;
+  }
+  
+  @keyframes shadow-wave {
+    0% {
+      border: 3px solid var(--primary);
+      box-shadow: 10px -10px 0 -3px var(--background), 10px -10px var(--green),
+        20px -20px 0 -3px var(--background), 20px -20px var(--yellow),
+        30px -30px 0 -3px var(--background), 30px -30px var(--orange),
+        40px -40px 0 -3px var(--background), 40px -40px var(--red);
+    }
+    20% {
+      border: 3px solid var(--red);
+      box-shadow: 10px -10px 0 -3px var(--background), 10px -10px var(--primary),
+        20px -20px 0 -3px var(--background), 20px -20px var(--green),
+        30px -30px 0 -3px var(--background), 30px -30px var(--yellow),
+        40px -40px 0 -3px var(--background), 40px -40px var(--orange);
+    }
+    40% {
+      border: 3px solid var(--orange);
+      box-shadow: 10px -10px 0 -3px var(--background), 10px -10px var(--red),
+        20px -20px 0 -3px var(--background), 20px -20px var(--primary),
+        30px -30px 0 -3px var(--background), 30px -30px var(--green),
+        40px -40px 0 -3px var(--background), 40px -40px var(--yellow);
+    }
+    60% {
+      border: 3px solid var(--yellow);
+      box-shadow: 10px -10px 0 -3px var(--background), 10px -10px var(--orange),
+        20px -20px 0 -3px var(--background), 20px -20px var(--red),
+        30px -30px 0 -3px var(--background), 30px -30px var(--primary),
+        40px -40px 0 -3px var(--background), 40px -40px var(--green);
+    }
+    80% {
+      border: 3px solid var(--green);
+      box-shadow: 10px -10px 0 -3px var(--background), 10px -10px var(--yellow),
+        20px -20px 0 -3px var(--background), 20px -20px var(--orange),
+        30px -30px 0 -3px var(--background), 30px -30px var(--red),
+        40px -40px 0 -3px var(--background), 40px -40px var(--primary);
+    }
+    100% {
+      border: 3px solid var(--primary);
+      box-shadow: 10px -10px 0 -3px var(--background), 10px -10px var(--green),
+        20px -20px 0 -3px var(--background), 20px -20px var(--yellow),
+        30px -30px 0 -3px var(--background), 30px -30px var(--orange),
+        40px -40px 0 -3px var(--background), 40px -40px var(--red);
+    }
+    
+  }
+
+.buttonBG{
+    border: 2px solid #FBC02D;
+    color: #FBC02D;
+  }
+.buttonBG:hover {
+      background-color: #FBC02D;
+      transition: all 0.3s ease-in-out;
+}
+.skewBtn{
+    width: 120px;
+    height: 30px;
+    outline: none;
+    cursor: pointer;
+    background: none;
+    transition: .5s;
+    font-size: 16px;
+    border-radius: 5px;
+    font-family: "Lato",sans-serif;
+}
+.skewBtn:hover{
+        border: none;
+        color: white;
+        font-size: 18px;
+        transform:scale(1.1);
+      }
+.skewBtn:disabled{
+    background-color:gainsboro;
+    color: white;
+    border: 2px solid gainsboro;
+}
+  
+  :root {
+    --primary: #22D2A0;
+    --secondary: #192824;
+    --background: #192824;
+    --green: #1FC11B;
+    --yellow: #FFD913;
+    --orange: #FF9C55;
+    --red: #FF5555;
+  } 
+  
+  *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .card p {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    color: white;
+  }
+  
+  .card h2 {
+    font-size: 22px;
+    margin: auto;
+    font-family: "Archivo Black", "Archivo", sans-serif;
+    font-weight: normal;
+    color: white;
+    overflow: hidden;
+  }
+  
+  /* ======================== CUSTOM =====================*/
+  .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    table-layout: fixed;
+    width: 900px;
+}
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    text-align: center;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+#randName {
+    /* display: flex; */
+    width: 250px;
+    height: 100px;
+    margin-top: 70px;
+    /* border: black solid 1px; */
+}
+
+/* #randName>p {
+    margin: auto;
+    overflow: hidden;
+} */
+
+#topBoard {
+    display: flex;
+    align-items: baseline;
+}
+
+#randBoard {
+    display: inline-block;
+    margin-left: 5%;
+}
+
+#resultBoard {
+    display: inline-block;
+    margin-left: 5%;
+}
+
+#resultBoard>h1 {
+    margin-top:10px;
+    text-align: center;
+    color: #ff4411;
+    font-size: 48px;
+    font-family: 'Signika', sans-serif;
+}
+.labelList{
+    color: #ff4411; transition: .5s; 
+    -moz-transition: .5s; 
+    -webkit-transition: .5s; 
+    -o-transition: .5s;
+}
+.memberList {
+    display: inline-block;
+    margin-left: 1%;
+}
+
+#assignedList {
+    display: inline-block;
+    margin-left: 1%;
+}
+
+/* table {
+    border-collapse: collapse;
+    margin-bottom: 50px;
+    table-layout: fixed;
+    width: 900px;
+}
+
+tr:nth-of-type(odd) {
+    background: #eee;
+}
+
+th {
+    background: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+td,
+th {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 14px;
+} */
+
+#excelExport{
+    float: right;
+}
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+
+@media only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+    table {
+        width: 100%;
+    }
+    /* Force table to not be like tables anymore */
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    tr {
+        border: 1px solid #ccc;
+    }
+    td {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+    td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        /* Label the data */
+        content: attr(data-column);
+        color: #000;
+        font-weight: bold;
+    }
 }
