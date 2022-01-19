@@ -26,7 +26,7 @@ class RandBoard extends React.Component {
   }
   async delayedRandom() {
     const items = this.props.members;
-    if (items.length == 1) {
+    if (items.length === 1) {
       return 0;
     }
     if (items.length < 1) {
@@ -58,10 +58,9 @@ class RandBoard extends React.Component {
     this.delayedRandom().then((value) => { this.props.handleRandomClick(value) });
   }
   render() {
-
     return (
       <div id="randBoard">
-        <span>{this.props.members.length} member(s) left&nbsp;</span>
+        <span>{this.props.randoms.filter(e=>!e).length} member(s) left&nbsp;</span>
         <div>
           <button className={"buttonBG skewBtn lorange"} disabled={this.state.isRandoming} onClick={() => this.handleRandomClick()}>Random..</button>
         </div>
@@ -91,34 +90,66 @@ class ResultBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      teams: ['A', 'B', 'C', 'D', 'E', 'F'],
-      rows: 6
+      teams: ['A', 'B', 'C', 'D'],
+      isSetup: false,
+      title: "The 6th SPU Football Season"
     }
   }
+
+  handleClickSetupCheckbox() {
+    this.setState((state, props) => ({
+      isSetup: !state.isSetup
+    }));
+  }
+  handleChangeTitleInput(e) {
+    this.setState((state, props) => ({
+      title: e.target.value
+    }));
+  }
+  handleChangeTeamInput(e) {
+    this.setState((state, props) => ({
+      teams: e.target.value.split(",")
+    }));
+  }
+
   render() {
     const ths = this.state.teams.map((team, idx) => {
-      return <th key={idx + 1}>{team}</th>
+      return <th key={idx}>{team}</th>
     })
-    const arrTemp = new Array(this.state.rows).fill("");
-    const length = this.state.rows;
+
     const tableObj = [];
-    const trs = this.state.teams.map((team, idx) => {
-      const rowObj = {};
-      const tds = arrTemp.map((e, i) => {
-        const keyIdx = i + (idx * length);
-        const teamName = this.state.teams[i];
-        const memName = this.props.randoms[keyIdx].toString();
-        rowObj[teamName] = memName;
-        return <td key={keyIdx}>{this.props.randoms[keyIdx]}</td>
-      })
-      tableObj.push(rowObj);
-      return <tr key={idx + 1}>
-        {tds}
-      </tr>
-    })
-    const assignedList = this.props.assigned;
+
+    let arrTd = [];
+    const arrTr = [];
+    let rowObj = {};
+
+    this.props.randoms.flatMap(e=>e).map((mem,idx) => {
+       const i = idx % (this.state.teams.length);
+       const teamName = this.state.teams[i];
+        if((idx !== 0 && i === 0)){
+          arrTr.push(arrTd);
+          arrTd = [];
+          tableObj.push(rowObj);
+          rowObj = {};
+        }
+        rowObj[teamName] = mem;
+        arrTd.push(mem);
+    });
+    arrTr.push(arrTd);
+    tableObj.push(rowObj);
+
     return (<div id="resultBoard">
-      <h1>The 6th SPU Football Season</h1>
+      
+      <span>Table Setup&nbsp;</span>
+      <span>
+        <input type="checkbox" value={this.state.isSetup} onClick={() => this.handleClickSetupCheckbox()} /><br/>
+      </span>
+      <div hidden={!this.state.isSetup}>
+        <label htmlFor='title'>Title: </label><input id="title"  value={this.state.title} onChange={(e)=>this.handleChangeTitleInput(e)}></input><br/>
+        <label htmlFor='teams'>Teams: </label><input id="teams" value={this.state.teams.join(",")} onChange={(e)=>this.handleChangeTeamInput(e)}></input><br/>
+      </div>
+
+      <h1>{this.state.title}</h1>
       <table className={"styled-table"}>
         <thead>
           <tr>
@@ -126,7 +157,7 @@ class ResultBoard extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {trs}
+          {arrTr.map((tr,iTr)=><tr key={iTr}>{tr.map((td,iTd)=><td key={iTr+iTd}>{td}</td>)}</tr>)}
         </tbody>
       </table>
       <ExcelExport team_members={tableObj}></ExcelExport>
@@ -139,15 +170,11 @@ class ExcelExport extends React.Component {
     super(props);
   }
   render() {
+    console.log("this.props.team_members",this.props.team_members);
     return (
       <ExcelFile element={<button className={"buttonBG skewBtn lorange"} id="excelExport">Excel Export</button>}>
         <ExcelSheet data={this.props.team_members} name="SPU Team Members">
-          <ExcelColumn label="A" value="A" />
-          <ExcelColumn label="B" value="B" />
-          <ExcelColumn label="C" value="C" />
-          <ExcelColumn label="D" value="D" />
-          <ExcelColumn label="E" value="E" />
-          <ExcelColumn label="F" value="F" />
+          {Object.keys(this.props.team_members[0]).map(val=><ExcelColumn label={val} value={val} />)}
         </ExcelSheet>
       </ExcelFile>
     );
@@ -161,9 +188,9 @@ class TopBoard extends React.Component {
   render() {
     return (
       <div id="topBoard">
-        <RandBoard members={this.props.members} handleRandomClick={this.props.handleRandomClick}>
+        <RandBoard members={this.props.members} randoms={this.props.randoms} handleRandomClick={this.props.handleRandomClick}>
         </RandBoard>
-        <ResultBoard assigned={this.props.assigned} randoms={this.props.randoms}>
+        <ResultBoard members={this.props.members} assigned={this.props.assigned} randoms={this.props.randoms}>
         </ResultBoard>
       </div>
     );
@@ -207,22 +234,22 @@ class SPUPlayerRandomer extends React.Component {
         <TopBoard members={this.state.data.members[this.state.currentListIdx]} handleRandomClick={(id) => this.handleRandomClick(id)} randoms={this.state.randoms}></TopBoard>
         <div id="randList">
           <div id="memberList1" className={"labelList memberList"}>
-            <p>1st Mems List</p>
+            <p>1st Mems List ({this.state.data.members[0].length})</p>
             <textarea rows="10" cols="35" value={this.state.data.members[0].join("\n")} onChange={(e) => this.handleMemberListChange(0, e)}>
             </textarea>
           </div>
           <div id="memberList2" className={"labelList memberList"}>
-            <p>2nd Mems List</p>
+            <p>2nd Mems List ({this.state.data.members[1].length})</p>
             <textarea rows="10" cols="35" value={this.state.data.members[1].join("\n")} onChange={(e) => this.handleMemberListChange(1, e)}>
             </textarea>
           </div>
           <div id="memberList3" className={"labelList memberList"}>
-            <p>3rd Mems List</p>
+            <p>3rd Mems List ({this.state.data.members[2].length})</p>
             <textarea rows="10" cols="35" value={this.state.data.members[2].join("\n")} onChange={(e) => this.handleMemberListChange(2, e)}>
             </textarea>
           </div>
           <div id="memberList4" className={"labelList memberList"}>
-            <p>4th Mems List</p>
+            <p>4th Mems List ({this.state.data.members[3].length})</p>
             <textarea rows="10" cols="35" value={this.state.data.members[3].join("\n")} onChange={(e) => this.handleMemberListChange(3, e)}>
             </textarea>
           </div>
@@ -243,7 +270,10 @@ const App = () => {
     document.title = "SPU Dashboard"
   }, [])
   
-  return <SPUPlayerRandomer data={data}></SPUPlayerRandomer>
+  return <>
+  <SPUPlayerRandomer data={data}></SPUPlayerRandomer>
+  <footer><link rel="stylesheet" type="text/css" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>Made with <i class="icon ion-heart heart" style={{color:"red"}}></i> in Saigon -&nbsp;<a href="https://www.facebook.com/tddthinh/" target="_blank">Thinh Tran</a></footer>
+  </>
 };
 
 export default App;
